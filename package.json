@@ -8,7 +8,7 @@
     "deploy": "gh-pages",
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext js,mjs --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "homepage": "https://ShivamKumarSah.github.io/shivamkumarsah.github.io",
