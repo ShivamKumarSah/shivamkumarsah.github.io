@@ -39,8 +39,8 @@ const Contact = () => {
         {
           from_name: form.name,
           to_name: 'Shivam Kumar Sah',
-          from_email: 'sahfamily9@gmail.com',
-          to_email: recipientEmail, // Use the recipient's email dynamically
+          from_email: recipientEmail,
+          to_email: 'sahfamily91@gmail.com', // Use the recipient's email dynamically
           message: form.message,
         },
         publicKey
