@@ -1,0 +1,13 @@
+.text-small {
+    font-size: 14px;
+    /* Adjust the font size as needed */
+    padding: 10px 20px;
+    /* Adjust the padding as needed */
+}
+
+@media screen and (max-width: 768px) {
+    .text-small {
+        font-size: 4px;
+        /* Adjust the font size for smaller screens */
+    }
+}
