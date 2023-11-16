@@ -1,3 +1,3 @@
-import SectionWrapper from './SectionWrapper.mjs';
+import SectionWrapper from './SectionWrapper.jsx';
 
 export { SectionWrapper };
