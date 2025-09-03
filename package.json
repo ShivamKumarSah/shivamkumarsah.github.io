@@ -9,19 +9,39 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-hover-card": "^1.1.7",
+    "@radix-ui/react-label": "^2.1.3",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
+    "@tabler/icons-react": "^3.31.0",
+    "@tailwindcss/cli": "^4.1.4",
+    "@tsparticles/engine": "^3.8.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.8.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.18.1",
+    "motion": "^12.7.4",
+    "next": "15.3.0",
+    "nodemailer": "^6.10.1",
+    "qss": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.0"
+    "react-element-to-jsx-string": "^17.0.0",
+    "sonner": "^2.0.3",
+    "tailwind-merge": "^3.3.1",
+    "three-globe": "^2.42.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.4",
     "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19.1.2",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "@types/three": "^0.175.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5"
   }
 }

@@ -5,16 +5,17 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Removed invalid @theme at-rule and selectors */
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000000;
     --foreground: #ededed;
   }
 }
@@ -23,4 +24,112 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+    padding: 0 8px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 1.1em;
+    word-break: break-word;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .container {
+    max-width: 100vw !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .grid,
+  .flex {
+    gap: 1rem !important;
+  }
+
+  /* Section spacing and compact layout */
+  .section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 0;
+  }
+
+  /* Skills grid: 3 columns, tighter gaps */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    justify-items: center;
+  }
+
+  .skill-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Profile image: smaller, centered, shadow */
+  .profile-img {
+    width: 80vw;
+    max-width: 180px;
+    margin: 0 auto;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Main text block: readable, centered */
+  .main-text {
+    max-width: 80vw;
+    margin: 0 auto;
+    padding: 0 8px;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  /* Button: full width, larger tap target */
+  .main-btn {
+    width: 100%;
+    padding: 0.75rem 0;
+    font-size: 1.1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+  }
+
+  /* Divider for visual separation */
+  .divider {
+    width: 60vw;
+    height: 2px;
+    background: linear-gradient(90deg, #7f5af0, #2cb67d);
+    margin: 2rem auto;
+    border-radius: 1px;
+  }
+
+  /* Headings: accent color, spacing */
+  h2,
+  h3 {
+    color: #7f5af0;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* Navbar: sticky, shadow */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: #171717;
+  }
 }
