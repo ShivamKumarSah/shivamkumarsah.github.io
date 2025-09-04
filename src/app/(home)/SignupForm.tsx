@@ -33,7 +33,8 @@ export function SignupForm() {
                 setModalMessage("Oops! Message failed to send. Please try again.");
             }
         } catch (error) {
-            setModalMessage("Network error. Please check your connection and try again.");
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            setModalMessage(`Network error: ${errorMessage}. Please check your connection and try again.`);
         } finally {
             setShowModal(true);
         }
@@ -48,7 +49,7 @@ export function SignupForm() {
                         Have a Project, Idea or <br className="hidden sm:block" /> Just Want to Say Hi?
                     </h2>
                     <p className="mt-2 max-w-sm text-xs sm:text-sm text-neutral-600 dark:text-neutral-300">
-                        I'm always open to discussing product design work, development partnerships, or side projects.<br className="hidden sm:block" />Drop a message and I'll get back to you as soon as I can.
+                        I&apos;m always open to discussing product design work, development partnerships, or side projects.<br className="hidden sm:block" />Drop a message and I&apos;ll get back to you as soon as I can.
                     </p>
 
                     <form onSubmit={handleSubmit} className="mt-4 sm:mt-6">
@@ -86,7 +87,7 @@ export function SignupForm() {
                             className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
                             type="submit"
                         >
-                            Let's Talk &rarr;
+                            Let&apos;s Talk &rarr;
                             <BottomGradient />
                         </button>
                     </form>

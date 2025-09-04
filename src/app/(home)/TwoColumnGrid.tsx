@@ -41,6 +41,7 @@ export function TwoColumnGrid({
                     : "items-start"
 
     const gapClass = gap === 2 ? "gap-2" : gap === 4 ? "gap-4" : gap === 6 ? "gap-6" : gap === 8 ? "gap-8" : "gap-10"
+    // const gapClass = gap === 2 ? "gap-2" : gap === 4 ? "gap-4" : gap === 6 ? "gap-6" : gap === 8 ? "gap-8" : "gap-10"
 
     const leftOrder = reverseOnMobile ? "order-2 md:order-none" : "order-1 md:order-none"
     const rightOrder = reverseOnMobile ? "order-1 md:order-none" : "order-2 md:order-none"
@@ -49,7 +50,7 @@ export function TwoColumnGrid({
         <section
             aria-label={ariaLabel}
             className={cn(
-                "mx-auto max-w-6xl px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 justify-center justify-items-center",
+                "mx-auto max-w-6xl px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 justify-center justify-items-center twoColumn",
                 gapClass,
                 alignClass,
                 className,

@@ -1,13 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-
 import React, {
     createContext,
     useState,
     useContext,
     useRef,
     useEffect,
+    useCallback,
 } from "react";
 import { LampContainer } from "@/components/ui/lamp";
 
@@ -36,16 +36,14 @@ export const CardContainer = ({
         containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
     };
 
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-        setIsMouseEntered(true);
-        if (!containerRef.current) return;
-    };
+    const handleMouseEnter = () => setIsMouseEntered(true);
 
-    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseLeave = () => {
         if (!containerRef.current) return;
         setIsMouseEntered(false);
         containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
     };
+
     return (
         <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
             <LampContainer className={cn("py-20 flex items-center justify-center", containerClassName)}>
@@ -80,7 +78,7 @@ export const CardBody = ({
     return (
         <div
             className={cn(
-                "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
+                "h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]",
                 className
             )}
         >
@@ -90,7 +88,6 @@ export const CardBody = ({
 };
 
 export const CardItem = ({
-    as: Tag = "div",
     children,
     className,
     translateX = 0,
@@ -101,7 +98,6 @@ export const CardItem = ({
     rotateZ = 0,
     ...rest
 }: {
-    as?: React.ElementType;
     children: React.ReactNode;
     className?: string;
     translateX?: number | string;
@@ -110,36 +106,35 @@ export const CardItem = ({
     rotateX?: number | string;
     rotateY?: number | string;
     rotateZ?: number | string;
-    [key: string]: any;
-}) => {
+} & React.HTMLAttributes<HTMLDivElement>) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isMouseEntered] = useMouseEnter();
 
-    useEffect(() => {
-        handleAnimations();
-    }, [isMouseEntered]);
-
-    const handleAnimations = () => {
+    const handleAnimations = useCallback(() => {
         if (!ref.current) return;
         if (isMouseEntered) {
             ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
         } else {
             ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
         }
-    };
+    }, [isMouseEntered, translateX, translateY, translateZ, rotateX, rotateY, rotateZ]);
+
+    useEffect(() => {
+        handleAnimations();
+    }, [handleAnimations]);
 
     return (
-        <Tag
+        <div
             ref={ref}
             className={cn("w-fit transition duration-200 ease-linear", className)}
             {...rest}
         >
             {children}
-        </Tag>
+        </div>
     );
 };
 
-// Create a hook to use the context
+// Hook to use MouseEnter context
 export const useMouseEnter = () => {
     const context = useContext(MouseEnterContext);
     if (context === undefined) {

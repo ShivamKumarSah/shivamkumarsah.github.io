@@ -5,7 +5,6 @@ import TwoColumnGrid from "./TwoColumnGrid";
 import { NavBarSection } from "./NavBarSection";
 import { SignupForm } from "./SignupForm";
 import { Globe } from "./Globe";
-import { TestimonialsSection } from "./TestimonialsSection";
 import { SkillSection } from "./SkillSection";
 import BottomSIT from "./BottomSIT";
 import { CardForResume } from "./CardForResume";

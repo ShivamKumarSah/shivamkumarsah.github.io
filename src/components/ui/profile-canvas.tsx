@@ -242,7 +242,7 @@ export const PixelatedCanvas: React.FC<ProfileCanvas> = ({
                         return [parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10)];
                     return null;
                 };
-                tintRGB = parse(tintColor) as any;
+                tintRGB = parse(tintColor);
             }
 
             for (let y = 0; y < offscreen.height; y += cellSize) {
@@ -498,7 +498,7 @@ export const PixelatedCanvas: React.FC<ProfileCanvas> = ({
                 canvasEl.removeEventListener("pointerleave", onPointerLeave);
                 if (rafRef.current) cancelAnimationFrame(rafRef.current);
             };
-            (img as any)._cleanup = cleanup;
+            (img as HTMLImageElement & { _cleanup?: () => void })._cleanup = cleanup;
         };
 
         img.onerror = () => {
@@ -515,13 +515,15 @@ export const PixelatedCanvas: React.FC<ProfileCanvas> = ({
             return () => {
                 isCancelled = true;
                 window.removeEventListener("resize", onResize);
-                if ((img as any)._cleanup) (img as any)._cleanup();
+                const imgWithCleanup = img as HTMLImageElement & { _cleanup?: () => void };
+                if (imgWithCleanup._cleanup) imgWithCleanup._cleanup();
             };
         }
 
         return () => {
             isCancelled = true;
-            if ((img as any)._cleanup) (img as any)._cleanup();
+            const imgWithCleanup = img as HTMLImageElement & { _cleanup?: () => void };
+            if (imgWithCleanup._cleanup) imgWithCleanup._cleanup();
         };
     }, [
         src,

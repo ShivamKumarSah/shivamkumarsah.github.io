@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/navbarComp";
 import { useState } from "react";
 import HeroSection from "./HeroSection";
-import Link from "next/link";
 
 
 export function NavBarSection() {
@@ -81,16 +80,14 @@ export function NavBarSection() {
                             >
                                 Login
                             </NavbarButton> */}
-
                             <NavbarButton
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                href="mailto:your-email@example.com"
                                 variant="primary"
                                 className="w-full"
                             >
-                                <Link href="mailto:your-email@example.com" className="w-full block text-center">
-                                    E-mail
-                                </Link>
+                                E-mail
                             </NavbarButton>
+
                         </div>
                     </MobileNavMenu>
                 </MobileNav>

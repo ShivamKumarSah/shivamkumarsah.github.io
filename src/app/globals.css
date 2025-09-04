@@ -13,6 +13,25 @@
   }
 }
 
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Tailwind-friendly class */
+.animate-scroll {
+  animation-name: scroll;
+  animation-duration: var(--animation-duration, 40s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: var(--animation-direction, forwards);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #000000;
@@ -27,20 +46,10 @@ body {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body {
     font-size: 15px;
     padding: 0 8px;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1.1em;
-    word-break: break-word;
   }
 
   img,
@@ -117,12 +126,12 @@ body {
   }
 
   /* Headings: accent color, spacing */
-  h2,
+  /* h2,
   h3 {
     color: #7f5af0;
     margin-bottom: 0.75rem;
     font-weight: 700;
-  }
+  } */
 
   /* Navbar: sticky, shadow */
   .navbar {
@@ -131,5 +140,133 @@ body {
     z-index: 50;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     background: #171717;
+  }
+
+  /* Pixel profile */
+  .profile-canvas {
+    width: 250px;
+    height: auto;
+  }
+
+  .button-wrapper {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    justify-items: stretch;
+    gap: 0.75rem !important;
+  }
+
+  .button-wrapper a {
+    width: 100% !important;
+    display: block;
+    min-height: 44px;
+    /* accessible tap target */
+  }
+
+  .button-wrapper a>span {
+    display: block;
+    text-align: center;
+  }
+
+  .color-btn-wrapper {
+    border-radius: 0.75rem;
+  }
+
+  /* Reduce excessive vertical padding in TwoColumnGrid cells on mobile only */
+  /* .py-30 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  } */
+
+  .twoColumn {
+    gap: 0 !important;
+    /* remove gap between left and right child */
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+  }
+
+  .sit-text {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-head {
+    text-align: center;
+  }
+
+  .color-text {
+    font-size: 2rem;
+    line-height: 2.2rem;
+  }
+
+  .skill-img img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .SIT {
+    margin-top: -10rem;
+    min-height: 450px;
+  }
+
+  .SIT-BOLD {
+    font-size: 8rem;
+  }
+
+  /* GLOBE */
+  /* Fix outer container height */
+  .h-screen {
+    height: auto !important;
+    /* remove forced fullscreen height on mobile */
+  }
+
+  /* Fix inner container holding globe */
+  .max-w-7xl {
+    height: auto !important;
+    padding-bottom: 4rem;
+    /* give breathing space under globe */
+  }
+
+  /* Fix gradient overlay so it doesn’t cut text */
+  .max-w-7xl>.absolute.w-full.bottom-0 {
+    height: 6rem !important;
+    /* smaller overlay height */
+  }
+
+  /* Fix globe positioning */
+  .max-w-7xl>.absolute.w-full.-bottom-20 {
+    position: relative !important;
+    /* remove absolute cut-off */
+    bottom: 0 !important;
+    height: auto !important;
+    margin-top: 2rem;
+  }
+
+  /* Ensure globe is visible fully */
+  canvas {
+    height: 50vh !important;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .globe {
+    height: 400px;
+  }
+
+  .social-icons {
+    display: none;
+  }
+
+  .paragraph-text {
+    margin-top: -10rem;
+  }
+
+  .pointer-text {
+    margin-bottom: -5rem;
+  }
+
+  .project-text {
+    margin-top: -8rem;
   }
 }

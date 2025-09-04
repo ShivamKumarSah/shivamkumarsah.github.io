@@ -1,31 +1,12 @@
 "use client"
-import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useVelocity, useAnimationFrame } from "framer-motion"
-import Image from 'next/image'
+import { motion, useScroll, useSpring } from "framer-motion"
 import Link from 'next/link'
-import { cn } from '@/utils/cn'
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight'
 import { ProfilePicture } from "./PofilePicture";
 
 export default function HeroSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
-
-  // Mouse parallax effect
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      setMousePosition({ x, y })
-      mouseX.set(x)
-      mouseY.set(y)
-    }
-  }
 
   return (
     <HeroHighlight containerClassName="min-h-screen">
@@ -40,7 +21,7 @@ export default function HeroSection() {
           >
             {/* Role badge */}
             <motion.div
-              className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-4 lg:mb-6"
+              className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-4 lg:mb-6 sit-text"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -55,7 +36,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight hero-head">
                 <span className="block text-white">Transforming</span>
                 <span className="block">
                   <Highlight className="text-black dark:text-white">
@@ -78,16 +59,16 @@ export default function HeroSection() {
 
             {/* CTA Buttons */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-6 lg:mt-8"
+              className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-6 lg:mt-8 button-wrapper"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
               <Link
                 href="#projects"
-                className="group relative px-5 py-2.5 lg:px-6 lg:py-3 rounded-xl overflow-hidden"
+                className="group relative px-5 py-2.5 lg:px-6 lg:py-3 rounded-xl overflow-hidden color-btn-wrapper"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 transition-transform duration-300 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 transition-transform duration-300 group-hover:scale-110 color-btn" />
                 <span className="relative text-white font-medium text-sm lg:text-base">Explore My Work</span>
               </Link>
               <Link
@@ -95,7 +76,7 @@ export default function HeroSection() {
                 className="group relative px-5 py-2.5 lg:px-6 lg:py-3 rounded-xl overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/10 backdrop-blur-sm border border-white/20 transition-transform duration-300 group-hover:scale-110" />
-                <span className="relative text-white font-medium text-sm lg:text-base">Let’s Collaborate</span>
+                <span className="relative text-white font-medium text-sm lg:text-base">Let&apos;s Collaborate</span>
               </Link>
             </motion.div>
           </motion.div>

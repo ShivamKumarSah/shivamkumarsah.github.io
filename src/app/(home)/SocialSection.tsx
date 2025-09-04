@@ -4,7 +4,6 @@ import {
     IconBrandGithub,
     IconBrandX,
     IconBrandLinkedin,
-    IconExchange,
 } from "@tabler/icons-react";
 
 export function SocialSection() {

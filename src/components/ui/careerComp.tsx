@@ -1,6 +1,5 @@
 "use client";
 import {
-    useMotionValueEvent,
     useScroll,
     useTransform,
     motion,
@@ -42,8 +41,8 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
                 <h2 className="text-lg md:text-4xl text-black dark:text-white max-w-4xl text-center m-0 p-0">
                     <TimelineHead />
                 </h2>
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-2xl text-center mt-4">
-                    Every opportunity I’ve had has shaped my mindset, sharpened my skills, and brought me closer to becoming a world-class developer. Here’s a glimpse into the timeline of internships, experiences, and moments that defined my path.
+                <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-2xl text-center ">
+                    Every opportunity I&apos;ve had has shaped my mindset, sharpened my skills, and brought me closer to becoming a world-class developer. Here&apos;s a glimpse into the timeline of internships, experiences, and moments that defined my path.
                 </p>
             </div>
 

@@ -24,7 +24,8 @@ export const GlareCard = ({
             y: 0,
         },
     });
-    const containerStyle = {
+
+    const containerStyle: React.CSSProperties = {
         "--m-x": "50%",
         "--m-y": "50%",
         "--r-x": "0deg",
@@ -37,9 +38,9 @@ export const GlareCard = ({
         "--radius": "48px",
         "--easing": "ease",
         "--transition": "var(--duration) var(--easing)",
-    } as any;
+    } as unknown as React.CSSProperties;
 
-    const backgroundStyle = {
+    const backgroundStyle: React.CSSProperties = {
         "--step": "5%",
         "--foil-svg": `url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.99994 3.419C2.99994 3.419 21.6142 7.43646 22.7921 12.153C23.97 16.8695 3.41838 23.0306 3.41838 23.0306' stroke='white' stroke-width='5' stroke-miterlimit='3.86874' stroke-linecap='round' style='mix-blend-mode:darken'/%3E%3C/svg%3E")`,
         "--pattern": "var(--foil-svg) center/100% no-repeat",
@@ -50,20 +51,20 @@ export const GlareCard = ({
         "--shade":
             "radial-gradient( farthest-corner circle at var(--m-x) var(--m-y),rgba(255,255,255,0.1) 12%,rgba(255,255,255,0.15) 20%,rgba(255,255,255,0.25) 120% ) var(--bg-x) var(--bg-y)/300% no-repeat",
         backgroundBlendMode: "hue, hue, hue, overlay",
-    };
+    } as unknown as React.CSSProperties;
 
     const updateStyles = () => {
         if (refElement.current) {
-            console.log(state.current);
             const { background, rotate, glare } = state.current;
-            refElement.current?.style.setProperty("--m-x", `${glare.x}%`);
-            refElement.current?.style.setProperty("--m-y", `${glare.y}%`);
-            refElement.current?.style.setProperty("--r-x", `${rotate.x}deg`);
-            refElement.current?.style.setProperty("--r-y", `${rotate.y}deg`);
-            refElement.current?.style.setProperty("--bg-x", `${background.x}%`);
-            refElement.current?.style.setProperty("--bg-y", `${background.y}%`);
+            refElement.current.style.setProperty("--m-x", `${glare.x}%`);
+            refElement.current.style.setProperty("--m-y", `${glare.y}%`);
+            refElement.current.style.setProperty("--r-x", `${rotate.x}deg`);
+            refElement.current.style.setProperty("--r-y", `${rotate.y}deg`);
+            refElement.current.style.setProperty("--bg-x", `${background.x}%`);
+            refElement.current.style.setProperty("--bg-y", `${background.y}%`);
         }
     };
+
     return (
         <div
             style={containerStyle}
@@ -101,8 +102,8 @@ export const GlareCard = ({
                 isPointerInside.current = true;
                 if (refElement.current) {
                     setTimeout(() => {
-                        if (isPointerInside.current) {
-                            refElement.current?.style.setProperty("--duration", "0s");
+                        if (isPointerInside.current && refElement.current) {
+                            refElement.current.style.setProperty("--duration", "0s");
                         }
                     }, 300);
                 }
@@ -111,8 +112,8 @@ export const GlareCard = ({
                 isPointerInside.current = false;
                 if (refElement.current) {
                     refElement.current.style.removeProperty("--duration");
-                    refElement.current?.style.setProperty("--r-x", `0deg`);
-                    refElement.current?.style.setProperty("--r-y", `0deg`);
+                    refElement.current.style.setProperty("--r-x", `0deg`);
+                    refElement.current.style.setProperty("--r-y", `0deg`);
                 }
             }}
         >

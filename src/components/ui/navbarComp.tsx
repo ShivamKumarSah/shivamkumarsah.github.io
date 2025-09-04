@@ -7,6 +7,7 @@ import {
     useScroll,
     useMotionValueEvent,
 } from "motion/react";
+import Image from "next/image";
 
 import React, { useRef, useState } from "react";
 
@@ -197,6 +198,19 @@ export const MobileNavMenu = ({
     isOpen,
     onClose,
 }: MobileNavMenuProps) => {
+    React.useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleEscape);
+            return () => document.removeEventListener('keydown', handleEscape);
+        }
+    }, [isOpen, onClose]);
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -236,7 +250,7 @@ export const NavbarLogo = () => {
             href="#"
             className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
         >
-            <img
+            <Image
                 src="logo.webp"
                 alt="logo"
                 width={30}
@@ -249,21 +263,16 @@ export const NavbarLogo = () => {
 
 export const NavbarButton = ({
     href,
-    as: Tag = "a",
     children,
     className,
     variant = "primary",
     ...props
 }: {
     href?: string;
-    as?: React.ElementType;
     children: React.ReactNode;
     className?: string;
     variant?: "primary" | "secondary" | "dark" | "gradient";
-} & (
-        | React.ComponentPropsWithoutRef<"a">
-        | React.ComponentPropsWithoutRef<"button">
-    )) => {
+} & React.ComponentPropsWithoutRef<"a">) => {
     const baseStyles =
         "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
@@ -277,12 +286,12 @@ export const NavbarButton = ({
     };
 
     return (
-        <Tag
-            href={href || undefined}
+        <a
+            href={href || "#"}
             className={cn(baseStyles, variantStyles[variant], className)}
             {...props}
         >
             {children}
-        </Tag>
+        </a>
     );
 };

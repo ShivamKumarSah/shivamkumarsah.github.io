@@ -18,8 +18,9 @@ export function PointerHighlight({
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
-        if (containerRef.current) {
-            const { width, height } = containerRef.current.getBoundingClientRect();
+        const currentContainer = containerRef.current;
+        if (currentContainer) {
+            const { width, height } = currentContainer.getBoundingClientRect();
             setDimensions({ width, height });
         }
 
@@ -30,13 +31,13 @@ export function PointerHighlight({
             }
         });
 
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
+        if (currentContainer) {
+            resizeObserver.observe(currentContainer);
         }
 
         return () => {
-            if (containerRef.current) {
-                resizeObserver.unobserve(containerRef.current);
+            if (currentContainer) {
+                resizeObserver.unobserve(currentContainer);
             }
         };
     }, []);
@@ -50,9 +51,10 @@ export function PointerHighlight({
             {dimensions.width > 0 && dimensions.height > 0 && (
                 <motion.div
                     className="pointer-events-none absolute inset-0 z-0"
-                    initial={{ opacity: 0, scale: 0.95, originX: 0, originY: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
+                    style={{ originX: 0, originY: 0 }}
                 >
                     <motion.div
                         className={cn(
