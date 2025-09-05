@@ -21,20 +21,42 @@ export function SignupForm() {
         };
 
         try {
-            const res = await fetch("/api/contact", {
+            const endpoint = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact").trim();
+            const res = await fetch(endpoint, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+                mode: "cors",
                 body: JSON.stringify(formData),
             });
-            const data = await res.json();
-            if (data.success) {
+
+            const contentType = res.headers.get("content-type") || "";
+            let data: unknown = null;
+            if (contentType.includes("application/json")) {
+                data = await res.json();
+            } else {
+                const text = await res.text();
+                throw new Error(
+                    `Non-JSON response (status ${res.status}). First 120 chars: ${text.slice(0, 120)}`
+                );
+            }
+
+            if (!res.ok) {
+                throw new Error(`Request failed with status ${res.status}`);
+            }
+
+            if ((data as { success?: boolean })?.success) {
                 setModalMessage("Message sent successfully!");
             } else {
                 setModalMessage("Oops! Message failed to send. Please try again.");
             }
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            setModalMessage(`Network error: ${errorMessage}. Please check your connection and try again.`);
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+            setModalMessage(
+                `Network/API error: ${errorMessage}. If you're on GitHub Pages, ensure NEXT_PUBLIC_CONTACT_ENDPOINT points to a valid JSON API and that CORS is enabled.`
+            );
         } finally {
             setShowModal(true);
         }
