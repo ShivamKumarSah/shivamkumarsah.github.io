@@ -69,7 +69,7 @@ export const ProjectComp: React.FC<ProjectCompProps> = ({ content, contentClassN
             ref={ref}
         >
             <div className="relative flex items-start px-4">
-                <div className="max-w-2xl">
+                <div className="max-w-2xl project-section-mobile">
                     {content.map((item, index) => (
                         <div key={item.title + index} className="my-20">
                             <motion.h2
@@ -86,7 +86,7 @@ export const ProjectComp: React.FC<ProjectCompProps> = ({ content, contentClassN
                             </motion.h2>
                             <motion.p
                                 animate={{ opacity: activeCard === index ? 1 : 0.3 }}
-                                className="text-lg mt-10 max-w-sm text-slate-300"
+                                className="text-lg mt-10 max-w-sm text-slate-300 project-text-mobile"
                             >
                                 {item.description}
                             </motion.p>

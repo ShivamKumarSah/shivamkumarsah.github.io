@@ -81,7 +81,7 @@ export function NavBarSection() {
                                 Login
                             </NavbarButton> */}
                             <NavbarButton
-                                href="mailto:your-email@example.com"
+                                href="mailto:shivamsah.tech@gmail.com"
                                 variant="primary"
                                 className="w-full"
                             >

@@ -89,6 +89,15 @@ body {
     height: 48px;
   }
 
+  .profile-canvas {
+    margin-top: 20em;
+    margin-bottom: -15em;
+  }
+
+  .cta-header {
+    margin-bottom: 15em;
+  }
+
   /* Profile image: smaller, centered, shadow */
   .profile-img {
     width: 80vw;
@@ -125,27 +134,12 @@ body {
     border-radius: 1px;
   }
 
-  /* Headings: accent color, spacing */
-  /* h2,
-  h3 {
-    color: #7f5af0;
-    margin-bottom: 0.75rem;
-    font-weight: 700;
-  } */
-
-  /* Navbar: sticky, shadow */
   .navbar {
     position: sticky;
     top: 0;
     z-index: 50;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     background: #171717;
-  }
-
-  /* Pixel profile */
-  .profile-canvas {
-    width: 250px;
-    height: auto;
   }
 
   .button-wrapper {
@@ -172,12 +166,6 @@ body {
   .color-btn-wrapper {
     border-radius: 0.75rem;
   }
-
-  /* Reduce excessive vertical padding in TwoColumnGrid cells on mobile only */
-  /* .py-30 {
-    padding-top: 1.25rem !important;
-    padding-bottom: 1.25rem !important;
-  } */
 
   .twoColumn {
     gap: 0 !important;
@@ -250,23 +238,46 @@ body {
     display: block;
   }
 
-  .globe {
-    height: 400px;
-  }
 
   .social-icons {
     display: none;
   }
 
   .paragraph-text {
-    margin-top: -10rem;
+    margin-top: -12rem;
+  }
+
+  .paragraph-text-mobile {
+    font-size: 18px;
   }
 
   .pointer-text {
     margin-bottom: -5rem;
   }
 
+
   .project-text {
     margin-top: -8rem;
+  }
+
+  .project-text-mobile {
+    font-size: 15px;
+  }
+
+  .project-section-mobile {
+    max-width: 100vw;
+  }
+}
+
+/* GlareCard sizing overrides */
+/* Optional wrapper utility: add class "glare-card-sm" to a parent to shrink the card */
+.glare-card-sm .w-\[320px\].\[aspect-ratio\:17\/21\] {
+  width: 260px !important;
+}
+
+/* Mobile: make GlareCard smaller by default */
+@media (max-width: 768px) {
+  .w-\[320px\].\[aspect-ratio\:17\/21\] {
+    width: 240px !important;
   }
 }

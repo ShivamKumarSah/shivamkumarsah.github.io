@@ -33,7 +33,7 @@ export function TwoColumnGrid({
 
     const alignClass =
         align === "center"
-            ? "items-center"
+            ? "items-center content-center"
             : align === "end"
                 ? "items-end"
                 : align === "stretch"
@@ -56,8 +56,8 @@ export function TwoColumnGrid({
                 className,
             )}
         >
-            <div className={cn(leftOrder, "flex justify-center", cellClassName, leftClassName)}>{leftChild}</div>
-            <div className={cn(rightOrder, "flex justify-center", cellClassName, rightClassName)}>{rightChild}</div>
+            <div className={cn(leftOrder, "flex items-center justify-center", cellClassName, leftClassName)}>{leftChild}</div>
+            <div className={cn(rightOrder, "flex items-center justify-center", cellClassName, rightClassName)}>{rightChild}</div>
         </section>
     )
 }
