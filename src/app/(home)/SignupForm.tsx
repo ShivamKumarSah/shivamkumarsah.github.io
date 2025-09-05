@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { cn } from "@/lib/utils";
+import { LoadingScreen } from "./LoadingScreen";
 
 export function SignupForm() {
     // State for modal visibility and message
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
+    const [modalType, setModalType] = useState<"success" | "error">("success");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const postJson = async (url: string, body: unknown) => {
         const res = await fetch(url, {
@@ -37,6 +40,7 @@ export function SignupForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
         const formData = {
             firstname: (e.currentTarget.elements.namedItem("firstname") as HTMLInputElement).value,
@@ -46,10 +50,15 @@ export function SignupForm() {
             message: (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement).value,
         };
 
-        const primary = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "").trim();
+        let primary = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "").trim();
         const fallback = (process.env.NEXT_PUBLIC_FORM_ENDPOINT || "").trim();
 
         try {
+            // Prefer same-origin Next.js API during local/dev or non-GitHub Pages hosting
+            if (!primary && typeof window !== "undefined" && !window.location.hostname.endsWith("github.io")) {
+                primary = "/api/contact";
+            }
+
             // Guard: relative API endpoint on static hosting will fail
             if (!primary && typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
                 throw new Error(
@@ -64,13 +73,19 @@ export function SignupForm() {
 
             // Try primary JSON API first if provided, else skip to fallback
             if (primary) {
-                const data = await postJson(primary, formData);
-                if (data?.success) {
-                    setModalMessage("Message sent successfully!");
-                    setShowModal(true);
-                    return;
+                try {
+                    const data = await postJson(primary, formData);
+                    if (data?.success) {
+                        setModalMessage("Message sent successfully!");
+                        setModalType("success");
+                        setIsSubmitting(false);
+                        setShowModal(true);
+                        return;
+                    }
+                    // If API returns JSON but not success, fall through to fallback
+                } catch (_primaryErr) {
+                    // Continue to fallback if configured
                 }
-                // If API returns JSON but not success, fall through to fallback
             }
 
             // Optional fallback: services like Formspree/Getform endpoint
@@ -80,6 +95,8 @@ export function SignupForm() {
                     const data = await postJson(fallback, formData);
                     if (data?.success !== false) {
                         setModalMessage(data?.message || "Message sent successfully!");
+                        setModalType("success");
+                        setIsSubmitting(false);
                         setShowModal(true);
                         return;
                     }
@@ -98,6 +115,8 @@ export function SignupForm() {
                     });
                     if (res.ok) {
                         setModalMessage("Message sent successfully!");
+                        setModalType("success");
+                        setIsSubmitting(false);
                         setShowModal(true);
                         return;
                     }
@@ -108,12 +127,14 @@ export function SignupForm() {
 
             // If neither path reported success
             setModalMessage("Oops! Message failed to send. Please try again.");
+            setModalType("error");
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Unknown error";
             setModalMessage(
                 `Network/API error: ${errorMessage}. Ensure a valid HTTPS NEXT_PUBLIC_CONTACT_ENDPOINT (JSON + CORS) or configure NEXT_PUBLIC_FORM_ENDPOINT.`
             );
-        } finally {
+            setModalType("error");
+            setIsSubmitting(false);
             setShowModal(true);
         }
     };
@@ -121,7 +142,7 @@ export function SignupForm() {
     return (
         <>
             {/* Blur background when modal is open */}
-            <div className={cn("transition-filter duration-300", showModal && "filter blur-sm")}>
+            <div className={cn("transition-filter duration-300", (showModal || isSubmitting) && "filter blur-sm")}>
                 <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black" id="contact">
                     <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-800 dark:text-neutral-200">
                         Have a Project, Idea or <br className="hidden sm:block" /> Just Want to Say Hi?
@@ -164,25 +185,81 @@ export function SignupForm() {
                         <button
                             className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
                             type="submit"
+                            disabled={isSubmitting}
                         >
-                            Let&apos;s Talk &rarr;
+                            {isSubmitting ? "Sending..." : "Let\'s Talk →"}
                             <BottomGradient />
                         </button>
                     </form>
                 </div>
             </div>
 
-            {/* Modal Popup */}
-            {showModal && (
+            {/* Loading Overlay */}
+            {isSubmitting && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                    <div className="bg-gray-900 text-white rounded-lg p-4 sm:p-6 max-w-sm mx-auto shadow-lg">
-                        <p className="mb-4 text-center text-sm sm:text-base">{modalMessage}</p>
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="cursor-pointer mx-auto block rounded-md bg-indigo-600 px-4 py-2 text-sm sm:text-base font-semibold hover:bg-indigo-700"
-                        >
-                            Okay
-                        </button>
+                    <div className="max-w-sm mx-auto">
+                        <LoadingScreen />
+                    </div>
+                </div>
+            )}
+
+            {/* Modern Animated Modal */}
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowModal(false)} />
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        className="relative mx-4 w-full max-w-md transform overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900 to-black p-[1px] shadow-2xl transition-all"
+                    >
+                        <div className="relative rounded-2xl bg-zinc-950">
+                            <div className="absolute -inset-[1px] rounded-2xl opacity-70 blur-md" style={{
+                                background: modalType === "success"
+                                    ? "radial-gradient(600px circle at 0% 0%, rgba(34,197,94,0.25), transparent 40%), radial-gradient(600px circle at 100% 0%, rgba(16,185,129,0.2), transparent 40%)"
+                                    : "radial-gradient(600px circle at 0% 0%, rgba(239,68,68,0.25), transparent 40%), radial-gradient(600px circle at 100% 0%, rgba(244,63,94,0.2), transparent 40%)"
+                            }} />
+                            <div className="relative z-10 p-5 sm:p-6">
+                                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
+                                    style={{
+                                        background: modalType === "success" ? "linear-gradient(135deg, #22c55e, #10b981)" : "linear-gradient(135deg, #ef4444, #f43f5e)"
+                                    }}
+                                >
+                                    {/* Icons */}
+                                    {modalType === "success" ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="h-7 w-7">
+                                            <path d="M20 6L9 17l-5-5" />
+                                        </svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="h-7 w-7">
+                                            <path d="M18 6L6 18M6 6l12 12" />
+                                        </svg>
+                                    )}
+                                </div>
+                                <h3 className="text-center text-lg font-semibold text-white">
+                                    {modalType === "success" ? "Message Sent" : "Something Went Wrong"}
+                                </h3>
+                                <p className="mt-2 text-center text-sm text-zinc-300">
+                                    {modalMessage}
+                                </p>
+                                <div className="mt-5 flex items-center justify-center gap-3">
+                                    <button
+                                        onClick={() => setShowModal(false)}
+                                        className="cursor-pointer rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+                                    >
+                                        Close
+                                    </button>
+                                    {modalType === "success" && (
+                                        <a
+                                            href="#contact"
+                                            onClick={() => setShowModal(false)}
+                                            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+                                        >
+                                            Send Another
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
