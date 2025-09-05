@@ -54,21 +54,27 @@ export function SignupForm() {
         const fallback = (process.env.NEXT_PUBLIC_FORM_ENDPOINT || "").trim();
 
         try {
-            // Prefer same-origin Next.js API during local/dev or non-GitHub Pages hosting
-            if (!primary && typeof window !== "undefined" && !window.location.hostname.endsWith("github.io")) {
-                primary = "/api/contact";
-            }
-
-            // Guard: relative API endpoint on static hosting will fail
-            if (!primary && typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
-                throw new Error(
-                    "Missing NEXT_PUBLIC_CONTACT_ENDPOINT on static hosting. Set it to a full https URL of your contact API."
-                );
-            }
-            if (primary && primary.startsWith("/") && typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
-                throw new Error(
-                    `Configured endpoint '${primary}' is relative. On GitHub Pages you must use a full https URL.`
-                );
+            // On GitHub Pages, skip the local API and go straight to fallback
+            if (typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
+                if (!fallback) {
+                    // Use a default form service for demo purposes
+                    const defaultFormEndpoint = "https://formspree.io/f/xpwgkqkj";
+                    const data = await postJson(defaultFormEndpoint, formData);
+                    if (data?.success !== false) {
+                        setModalMessage("Message sent successfully!");
+                        setModalType("success");
+                        setIsSubmitting(false);
+                        setShowModal(true);
+                        return;
+                    }
+                }
+                // Skip primary endpoint on GitHub Pages
+                primary = "";
+            } else {
+                // Prefer same-origin Next.js API during local/dev or non-GitHub Pages hosting
+                if (!primary) {
+                    primary = "/api/contact";
+                }
             }
 
             // Try primary JSON API first if provided, else skip to fallback
