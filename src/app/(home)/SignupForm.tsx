@@ -83,7 +83,7 @@ export function SignupForm() {
                         return;
                     }
                     // If API returns JSON but not success, fall through to fallback
-                } catch (_primaryErr) {
+                } catch {
                     // Continue to fallback if configured
                 }
             }
