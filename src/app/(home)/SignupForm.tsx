@@ -83,7 +83,7 @@ export function SignupForm() {
                         setShowModal(true);
                         return;
                     }
-                } catch (_err) {
+                } catch {
                     // Some services require form-encoded; try that as a secondary attempt
                     const form = new URLSearchParams();
                     Object.entries(formData).forEach(([k, v]) => form.append(k, String(v)));
