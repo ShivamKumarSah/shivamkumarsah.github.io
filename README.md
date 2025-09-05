@@ -24,9 +24,9 @@ And with **Aceternity UI**, I added subtle animations and components that make t
 - **Styling:** [TailwindCSS](https://tailwindcss.com/)  
 - **UI Components:** [Aceternity UI](https://ui.aceternity.com/)  
 - **3D & Animations:** Framer Motion, Three.js  
-- **Deployment:** Vercel  
+- **Deployment:** Github Pages  
 
 ---
 
 ## 📸 Preview  
-![Portfolio Screenshot](./preview.png)  
+<img width="1919" height="1073" alt="image" src="https://github.com/user-attachments/assets/0d214809-a1a1-4acc-a152-cb7382f0aef7" />
