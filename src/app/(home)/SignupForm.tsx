@@ -9,6 +9,32 @@ export function SignupForm() {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
+    const postJson = async (url: string, body: unknown) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            mode: "cors",
+            body: JSON.stringify(body),
+        });
+        const contentType = res.headers.get("content-type") || "";
+        let data: unknown = null;
+        if (contentType.includes("application/json")) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            throw new Error(
+                `Non-JSON response (status ${res.status}). First 120 chars: ${text.slice(0, 120)}`
+            );
+        }
+        if (!res.ok) {
+            throw new Error(`Request failed with status ${res.status}`);
+        }
+        return data as { success?: boolean; message?: string };
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -20,42 +46,72 @@ export function SignupForm() {
             message: (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement).value,
         };
 
-        try {
-            const endpoint = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact").trim();
-            const res = await fetch(endpoint, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-                mode: "cors",
-                body: JSON.stringify(formData),
-            });
+        const primary = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "").trim();
+        const fallback = (process.env.NEXT_PUBLIC_FORM_ENDPOINT || "").trim();
 
-            const contentType = res.headers.get("content-type") || "";
-            let data: unknown = null;
-            if (contentType.includes("application/json")) {
-                data = await res.json();
-            } else {
-                const text = await res.text();
+        try {
+            // Guard: relative API endpoint on static hosting will fail
+            if (!primary && typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
                 throw new Error(
-                    `Non-JSON response (status ${res.status}). First 120 chars: ${text.slice(0, 120)}`
+                    "Missing NEXT_PUBLIC_CONTACT_ENDPOINT on static hosting. Set it to a full https URL of your contact API."
+                );
+            }
+            if (primary && primary.startsWith("/") && typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
+                throw new Error(
+                    `Configured endpoint '${primary}' is relative. On GitHub Pages you must use a full https URL.`
                 );
             }
 
-            if (!res.ok) {
-                throw new Error(`Request failed with status ${res.status}`);
+            // Try primary JSON API first if provided, else skip to fallback
+            if (primary) {
+                const data = await postJson(primary, formData);
+                if (data?.success) {
+                    setModalMessage("Message sent successfully!");
+                    setShowModal(true);
+                    return;
+                }
+                // If API returns JSON but not success, fall through to fallback
             }
 
-            if ((data as { success?: boolean })?.success) {
-                setModalMessage("Message sent successfully!");
-            } else {
-                setModalMessage("Oops! Message failed to send. Please try again.");
+            // Optional fallback: services like Formspree/Getform endpoint
+            if (fallback) {
+                try {
+                    // Many services accept JSON with Accept: application/json
+                    const data = await postJson(fallback, formData);
+                    if (data?.success !== false) {
+                        setModalMessage(data?.message || "Message sent successfully!");
+                        setShowModal(true);
+                        return;
+                    }
+                } catch (err) {
+                    // Some services require form-encoded; try that as a secondary attempt
+                    const form = new URLSearchParams();
+                    Object.entries(formData).forEach(([k, v]) => form.append(k, String(v)));
+                    const res = await fetch(fallback, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Accept": "application/json, text/plain, */*",
+                        },
+                        mode: "cors",
+                        body: form.toString(),
+                    });
+                    if (res.ok) {
+                        setModalMessage("Message sent successfully!");
+                        setShowModal(true);
+                        return;
+                    }
+                    const t = await res.text();
+                    throw new Error(`Fallback failed with status ${res.status}. ${t.slice(0, 120)}`);
+                }
             }
+
+            // If neither path reported success
+            setModalMessage("Oops! Message failed to send. Please try again.");
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Unknown error";
             setModalMessage(
-                `Network/API error: ${errorMessage}. If you're on GitHub Pages, ensure NEXT_PUBLIC_CONTACT_ENDPOINT points to a valid JSON API and that CORS is enabled.`
+                `Network/API error: ${errorMessage}. Ensure a valid HTTPS NEXT_PUBLIC_CONTACT_ENDPOINT (JSON + CORS) or configure NEXT_PUBLIC_FORM_ENDPOINT.`
             );
         } finally {
             setShowModal(true);
