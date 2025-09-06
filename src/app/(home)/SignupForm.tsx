@@ -51,25 +51,19 @@ export function SignupForm() {
         };
 
         let primary = (process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "").trim();
-        const fallback = (process.env.NEXT_PUBLIC_FORM_ENDPOINT || "").trim();
+        const fallback = (process.env.NEXT_PUBLIC_FORM_ENDPOINT || "https://formspree.io/f/mzzakoao").trim();
 
         try {
-            // On GitHub Pages, skip the local API and go straight to fallback
+            // On GitHub Pages, allow absolute HTTPS endpoints; otherwise require a form service
             if (typeof window !== "undefined" && window.location.hostname.endsWith("github.io")) {
-                if (!fallback) {
-                    // Use a default form service for demo purposes
-                    const defaultFormEndpoint = "https://formspree.io/f/xpwgkqkj";
-                    const data = await postJson(defaultFormEndpoint, formData);
-                    if (data?.success !== false) {
-                        setModalMessage("Message sent successfully!");
-                        setModalType("success");
-                        setIsSubmitting(false);
-                        setShowModal(true);
-                        return;
+                const isAbsoluteHttps = primary.startsWith("http://") || primary.startsWith("https://");
+                if (!isAbsoluteHttps) {
+                    if (!fallback) {
+                        throw new Error("GitHub Pages detected. Set NEXT_PUBLIC_FORM_ENDPOINT to your Formspree URL.");
                     }
+                    // Skip primary endpoint on GitHub Pages if it's relative
+                    primary = "";
                 }
-                // Skip primary endpoint on GitHub Pages
-                primary = "";
             } else {
                 // Prefer same-origin Next.js API during local/dev or non-GitHub Pages hosting
                 if (!primary) {
