@@ -1,9 +1,35 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Force dark theme globally - disable theme switching */
+* {
+  color-scheme: dark only;
 }
+
+:root {
+  --background: #000000;
+  --foreground: #ededed;
+}
+
+/* Override TailwindCSS defaults to always use dark theme */
+body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Force all text to be light colored */
+.text-black { color: #ffffff !important; }
+.text-neutral-800 { color: #e5e5e5 !important; }
+.text-neutral-700 { color: #d4d4d4 !important; }
+.text-neutral-600 { color: #a3a3a3 !important; }
+
+/* Force all backgrounds to be dark */
+.bg-white { background-color: #000000 !important; }
+.bg-gray-50 { background-color: #1a1a1a !important; }
+.bg-neutral-50 { background-color: #1a1a1a !important; }
+
+/* Force borders to be dark */
+.border-neutral-200 { border-color: #404040 !important; }
+.border-neutral-300 { border-color: #525252 !important; }
 
 /* Removed invalid @theme at-rule and selectors */
 
@@ -30,13 +56,6 @@
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: var(--animation-direction, forwards);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -145,7 +164,7 @@ body {
     top: 0;
     z-index: 50;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    background: #171717;
+    background: #000000;
   }
 
   .button-wrapper {

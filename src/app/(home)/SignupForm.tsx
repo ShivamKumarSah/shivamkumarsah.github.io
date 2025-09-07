@@ -143,11 +143,11 @@ export function SignupForm() {
         <>
             {/* Blur background when modal is open */}
             <div className={cn("transition-filter duration-300", (showModal || isSubmitting) && "filter blur-sm")}>
-                <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black" id="contact">
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-800 dark:text-neutral-200">
+                <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-black p-4 md:rounded-2xl md:p-8" id="contact">
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-200">
                         Have a Project, Idea or <br className="hidden sm:block" /> Just Want to Say Hi?
                     </h2>
-                    <p className="mt-2 max-w-sm text-xs sm:text-sm text-neutral-600 dark:text-neutral-300">
+                    <p className="mt-2 max-w-sm text-xs sm:text-sm text-neutral-300">
                         I&apos;m always open to discussing product design work, development partnerships, or side projects.<br className="hidden sm:block" />Drop a message and I&apos;ll get back to you as soon as I can.
                     </p>
 
@@ -176,14 +176,14 @@ export function SignupForm() {
                                 id="message"
                                 name="message"
                                 placeholder="e.g., Please provide details about the role or project..."
-                                className="w-full rounded-md border p-2 text-sm sm:text-base dark:bg-gray-800 dark:text-white"
+                                className="w-full rounded-md border border-gray-600 bg-gray-800 text-white p-2 text-sm sm:text-base placeholder:text-gray-400 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
                                 rows={5}
                                 required
                             />
                         </LabelInputContainer>
 
                         <button
-                            className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+                            className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-zinc-800 from-zinc-900 to-zinc-900 font-medium text-white shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] hover:bg-zinc-700 transition-colors duration-200"
                             type="submit"
                             disabled={isSubmitting}
                         >

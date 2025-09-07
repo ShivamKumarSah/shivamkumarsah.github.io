@@ -397,7 +397,7 @@ export function Globe() {
 
     return (
         <div>
-            <div className="mt-10 flex flex-row items-center justify-center h-screen md:h-auto dark:bg-black bg-white relative w-full">
+            <div className="mt-10 flex flex-row items-center justify-center h-screen md:h-auto bg-black relative w-full">
                 <div className="max-w-7xl mx-auto w-full relative overflow-hidden md:h-[30rem] px-4 mb-20">
                     <motion.div
                         initial={{
@@ -413,14 +413,14 @@ export function Globe() {
                         }}
                         className="div"
                     >
-                        <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-white">
+                        <h2 className="text-center text-xl md:text-4xl font-bold text-white">
                             Let&apos;s Connect Worldwide
                         </h2>
-                        <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
+                        <p className="text-center text-base md:text-lg font-normal text-neutral-200 max-w-md mt-2 mx-auto">
                             I&apos;m just a message away—no matter where in the world you are. Let&apos;s collaborate across borders.
                         </p>
                     </motion.div>
-                    <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
+                    <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent to-black z-40" />
                     <div className="absolute w-full -bottom-20 h-72 md:h-full z-10 globe">
                         <World data={sampleArcs} globeConfig={globeConfig} />
                     </div>
